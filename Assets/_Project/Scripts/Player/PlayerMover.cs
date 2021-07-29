@@ -4,10 +4,12 @@ using UnityEngine;
 namespace SimpleRunner.Player
 {
     [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(PlayerHealth))]
     [RequireComponent(typeof(Animator))]
     public class PlayerMover : MonoBehaviour
     {
         private CharacterController _characterController;
+        private PlayerHealth _playerHealth;
         private Animator _animator;
         private Vector3 _currentDirection = Vector3.zero;
         private Vector3 _desiredDirection = Vector3.zero;
@@ -48,6 +50,7 @@ namespace SimpleRunner.Player
         {
             _characterController = GetComponent<CharacterController>();
             _animator = GetComponent<Animator>();
+            _playerHealth = GetComponent<PlayerHealth>();
         }
 
         public void Move(Vector3 direction)
@@ -57,6 +60,11 @@ namespace SimpleRunner.Player
 
         private void Update()
         {
+            if (_playerHealth.IsDead)
+            {
+                return;
+            }
+            
             UpdatePosition();
             ClampPosition();
             UpdateAnimator();
