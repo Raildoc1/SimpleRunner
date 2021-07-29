@@ -1,6 +1,7 @@
 ﻿using System;
 using SimpleRunner.Player;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace SimpleRunner.Core
@@ -12,6 +13,8 @@ namespace SimpleRunner.Core
         public event Action OnPlayerDie;
         public event Action OnFinishGame;
         public event Action OnGamePaused;
+
+        public UnityEvent UnityOnFinishGame;
         
         private void OnEnable()
         {
@@ -38,6 +41,7 @@ namespace SimpleRunner.Core
         public void Win()
         {
             OnFinishGame?.Invoke();
+            UnityOnFinishGame?.Invoke();
         }
 
         public void Pause()
