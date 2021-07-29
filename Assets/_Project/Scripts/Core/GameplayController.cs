@@ -1,4 +1,5 @@
-﻿using SimpleRunner.Player;
+﻿using System;
+using SimpleRunner.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,11 +7,12 @@ namespace SimpleRunner.Core
 {
     public class GameplayController : MonoBehaviour
     {
-        [SerializeField] private GameObject _loseWindow;
-        [SerializeField] private GameObject _winWindow;
-        [SerializeField] private GameObject _pauseWindow;
         [SerializeField] private PlayerHealth _playerHealth;
 
+        public event Action OnPlayerDie;
+        public event Action OnFinishGame;
+        public event Action OnGamePaused;
+        
         private void OnEnable()
         {
             if (!_playerHealth)
@@ -19,45 +21,34 @@ namespace SimpleRunner.Core
                 enabled = false;
                 return;
             }
-
-            _playerHealth.OnPlayerDie += OnPlayerDie;
+            
+            _playerHealth.OnDie += PlayerDie;
         }
 
         private void OnDisable()
         {
-            _playerHealth.OnPlayerDie -= OnPlayerDie;
+            _playerHealth.OnDie -= PlayerDie;
         }
 
-        private void OnPlayerDie()
+        private void PlayerDie()
         {
-            Time.timeScale = 0f;
-            _loseWindow.SetActive(true);
+            OnPlayerDie?.Invoke();
         }
 
         public void Win()
         {
-            Time.timeScale = 0f;
-            _winWindow.SetActive(true);
+            OnFinishGame?.Invoke();
         }
 
         public void Pause()
         {
-            Time.timeScale = 0f;
-            _pauseWindow.SetActive(true);
-        }
-
-        public void UnPause()
-        {
-            Time.timeScale = 1f;
-            _pauseWindow.SetActive(false);
+            OnGamePaused?.Invoke();
         }
         
         public void Restart()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             Time.timeScale = 1f;
-            _loseWindow.SetActive(false);
-            _winWindow.SetActive(false);
         }
     }
 }

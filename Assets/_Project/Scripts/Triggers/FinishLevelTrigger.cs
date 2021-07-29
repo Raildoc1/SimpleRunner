@@ -1,5 +1,4 @@
-﻿using System;
-using SimpleRunner.Core;
+﻿using SimpleRunner.Core;
 using UnityEngine;
 
 namespace SimpleRunner.Triggers

@@ -8,12 +8,12 @@ namespace SimpleRunner.Player
         private bool _isDead = false;
         public bool IsDead => _isDead;
 
-        public event Action OnPlayerDie;
+        public event Action OnDie;
         
         public void Die()
         {
             _isDead = true;
-            OnPlayerDie?.Invoke();
+            OnDie?.Invoke();
         }
     }
 }
